@@ -4,7 +4,7 @@ import Link from "next/link";
 import DeleteStudentButton from "@/components/DeleteStudentButton";
 
 import { getStudents } from "@/services/student.service";
-
+export const dynamic = "force-dynamic";
 export default async function StudentPage() {
   const students = await getStudents();
 

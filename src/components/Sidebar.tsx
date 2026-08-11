@@ -148,34 +148,51 @@ export default function Sidebar() {
 
         {/* DATA PESERTA */}
 
-        <div className="mb-6">
-          <p
-            className="
-              text-xs
-              font-semibold
-              text-gray-400
-              uppercase
-              tracking-wider
-              px-4
-              mb-2
-            "
-          >
-            Data Peserta
-          </p>
+<div className="mb-6">
+  <p
+    className="
+      text-xs
+      font-semibold
+      text-gray-400
+      uppercase
+      tracking-wider
+      px-4
+      mb-2
+    "
+  >
+    Data Peserta
+  </p>
 
-          <Link
-            href="/admin/students"
-            className={menuClass("/admin/students")}
-          >
-            <span className="text-lg">
-              👥
-            </span>
+  {/* DATA SISWA */}
 
-            <span>
-              Data Siswa
-            </span>
-          </Link>
-        </div>
+  <Link
+    href="/admin/students"
+    className={menuClass("/admin/students")}
+  >
+    <span className="text-lg">
+      👥
+    </span>
+
+    <span>
+      Data Siswa
+    </span>
+  </Link>
+
+  {/* STATUS KARTU */}
+
+  <Link
+    href="/admin/status"
+    className={menuClass("/admin/status")}
+  >
+    <span className="text-lg">
+      🎫
+    </span>
+
+    <span>
+      Status Kartu
+    </span>
+  </Link>
+</div>
 
         {/* UJIAN */}
 

@@ -19,6 +19,10 @@ export async function GET(request: Request) {
 
     const search = keyword.trim();
 
+    // =====================================================
+    // CARI SISWA BERDASARKAN NIS / NISN
+    // =====================================================
+
     const { data, error } = await supabaseAdmin
       .from("students")
       .select(`
@@ -39,6 +43,10 @@ export async function GET(request: Request) {
       .or(`nis.eq.${search},nisn.eq.${search}`)
       .maybeSingle();
 
+    // =====================================================
+    // ERROR DATABASE
+    // =====================================================
+
     if (error) {
       console.error(
         "Gagal mencari siswa:",
@@ -48,11 +56,16 @@ export async function GET(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Terjadi kesalahan saat mencari data.",
+          message:
+            "Terjadi kesalahan saat mencari data.",
         },
         { status: 500 }
       );
     }
+
+    // =====================================================
+    // SISWA TIDAK DITEMUKAN
+    // =====================================================
 
     if (!data) {
       return NextResponse.json(
@@ -65,27 +78,52 @@ export async function GET(request: Request) {
       );
     }
 
-    const kelas = data.classes;
+    // =====================================================
+    // FORMAT DATA KELAS
+    // =====================================================
+
+    const kelas = Array.isArray(data.classes)
+      ? data.classes[0]
+      : data.classes;
+
+    const major = Array.isArray(kelas?.majors)
+      ? kelas.majors[0]
+      : kelas?.majors;
 
     const className = kelas
-      ? `${kelas.grade} ${
-          kelas.majors?.code ?? ""
-        } ${kelas.class_number}`
+      ? `${kelas.grade ?? ""} ${
+          major?.code ?? ""
+        } ${kelas.class_number ?? ""}`.trim()
       : "-";
+
+    // =====================================================
+    // RESPONSE
+    // =====================================================
 
     return NextResponse.json({
       success: true,
+
       data: {
         id: data.id,
+
         nis: data.nis,
+
         nisn: data.nisn,
+
         full_name: data.full_name,
+
         status_kartu: data.status_kartu,
+
         class_name: className,
+
+        major_name: major?.name ?? "",
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Check Card API Error:",
+      error
+    );
 
     return NextResponse.json(
       {
