@@ -25,15 +25,20 @@ export default function EditStudentPage() {
 
   const id = params.id as string;
 
-  const [classes, setClasses] = useState<ClassItem[]>([]);
+  const [classes, setClasses] =
+    useState<ClassItem[]>([]);
 
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] =
+    useState(true);
 
-  const [message, setMessage] = useState("");
-  const [success, setSuccess] = useState<boolean | null>(
-    null
-  );
+  const [saving, setSaving] =
+    useState(false);
+
+  const [message, setMessage] =
+    useState("");
+
+  const [success, setSuccess] =
+    useState<boolean | null>(null);
 
   const [form, setForm] = useState({
     nis: "",
@@ -44,6 +49,11 @@ export default function EditStudentPage() {
     birth_place: "",
     birth_date: "",
     is_active: true,
+
+    status_kartu: "BELUM",
+    nomor_ujian: "",
+    lembar_ujian: "",
+    password_ujian: "",
   });
 
   // =====================================================
@@ -57,9 +67,10 @@ export default function EditStudentPage() {
         // AMBIL DATA KELAS
         // =================================================
 
-        const classResponse = await fetch(
-          "/api/admin/students/classes"
-        );
+        const classResponse =
+          await fetch(
+            "/api/admin/students/classes"
+          );
 
         const classResult =
           await classResponse.json();
@@ -78,15 +89,18 @@ export default function EditStudentPage() {
           return;
         }
 
-        setClasses(classResult.data);
+        setClasses(
+          classResult.data
+        );
 
         // =================================================
         // AMBIL DATA SISWA
         // =================================================
 
-        const studentResponse = await fetch(
-          `/api/admin/students/${id}`
-        );
+        const studentResponse =
+          await fetch(
+            `/api/admin/students/${id}`
+          );
 
         const studentResult =
           await studentResponse.json();
@@ -105,27 +119,50 @@ export default function EditStudentPage() {
           return;
         }
 
-        const student = studentResult.data;
+        const student =
+          studentResult.data;
 
         // =================================================
         // MASUKKAN DATA KE FORM
         // =================================================
 
         setForm({
-          nis: student.nis || "",
-          nisn: student.nisn || "",
+          nis:
+            student.nis || "",
+
+          nisn:
+            student.nisn || "",
+
           full_name:
             student.full_name || "",
+
           class_id:
             student.class_id || "",
+
           gender:
             student.gender || "",
+
           birth_place:
             student.birth_place || "",
+
           birth_date:
             student.birth_date || "",
+
           is_active:
             student.is_active ?? true,
+
+          status_kartu:
+            student.status_kartu ||
+            "BELUM",
+
+          nomor_ujian:
+            student.nomor_ujian || "",
+
+          lembar_ujian:
+            student.lembar_ujian || "",
+
+          password_ujian:
+            student.password_ujian || "",
         });
       } catch (error) {
         console.error(error);
@@ -154,7 +191,10 @@ export default function EditStudentPage() {
       HTMLInputElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+    } = e.target;
 
     setForm((prev) => ({
       ...prev,
@@ -176,16 +216,20 @@ export default function EditStudentPage() {
     setSuccess(null);
 
     try {
-      const response = await fetch(
-        `/api/admin/students/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
+      const response =
+        await fetch(
+          `/api/admin/students/${id}`,
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body: JSON.stringify(form),
+          }
+        );
 
       const result =
         await response.json();
@@ -211,7 +255,10 @@ export default function EditStudentPage() {
       );
 
       setTimeout(() => {
-        router.push("/admin/students");
+        router.push(
+          "/admin/students"
+        );
+
         router.refresh();
       }, 700);
     } catch (error) {
@@ -258,23 +305,15 @@ export default function EditStudentPage() {
   return (
     <div className="min-h-screen bg-gray-100">
 
-      {/* =================================================
-          SIDEBAR
-      ================================================= */}
+      {/* SIDEBAR */}
 
       <Sidebar />
 
-      {/* =================================================
-          AREA KONTEN
-      ================================================= */}
+      {/* AREA KONTEN */}
 
       <div className="ml-[330px] min-h-screen">
 
-        {/* HEADER */}
-
         <Header />
-
-        {/* CONTENT */}
 
         <main className="p-8">
 
@@ -283,6 +322,7 @@ export default function EditStudentPage() {
           ================================================= */}
 
           <div className="mb-6">
+
             <h1 className="text-3xl font-bold text-gray-900">
               Edit Siswa
             </h1>
@@ -290,6 +330,7 @@ export default function EditStudentPage() {
             <p className="text-gray-500 mt-1">
               Perbarui data siswa SMK Ekonomika.
             </p>
+
           </div>
 
           {/* =================================================
@@ -300,265 +341,510 @@ export default function EditStudentPage() {
 
             <form
               onSubmit={handleSubmit}
-              className="space-y-6"
+              className="space-y-8"
             >
 
               {/* =================================================
                   DATA SISWA
               ================================================= */}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <section>
 
-                {/* NIS */}
+                <div className="mb-5">
 
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    NIS
-                  </label>
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Data Siswa
+                  </h2>
 
-                  <input
-                    type="text"
-                    name="nis"
-                    value={form.nis}
-                    onChange={handleChange}
-                    required
-                    className="
-                      w-full
-                      border
-                      border-gray-300
-                      rounded-lg
-                      px-4
-                      py-3
-                      bg-white
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-blue-500
-                    "
-                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    Informasi identitas dan kelas siswa.
+                  </p>
+
                 </div>
 
-                {/* NISN */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    NISN
-                  </label>
+                  {/* NIS */}
 
-                  <input
-                    type="text"
-                    name="nisn"
-                    value={form.nisn}
-                    onChange={handleChange}
-                    required
-                    className="
-                      w-full
-                      border
-                      border-gray-300
-                      rounded-lg
-                      px-4
-                      py-3
-                      bg-white
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-blue-500
-                    "
-                  />
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      NIS
+                    </label>
+
+                    <input
+                      type="text"
+                      name="nis"
+                      value={form.nis}
+                      onChange={handleChange}
+                      required
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                  </div>
+
+                  {/* NISN */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      NISN
+                    </label>
+
+                    <input
+                      type="text"
+                      name="nisn"
+                      value={form.nisn}
+                      onChange={handleChange}
+                      required
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                  </div>
+
+                  {/* NAMA */}
+
+                  <div className="md:col-span-2">
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Nama Lengkap
+                    </label>
+
+                    <input
+                      type="text"
+                      name="full_name"
+                      value={form.full_name}
+                      onChange={handleChange}
+                      required
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                  </div>
+
+                  {/* KELAS */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Kelas
+                    </label>
+
+                    <select
+                      name="class_id"
+                      value={form.class_id}
+                      onChange={handleChange}
+                      required
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    >
+
+                      <option value="">
+                        Pilih Kelas
+                      </option>
+
+                      {classes.map(
+                        (item) => (
+                          <option
+                            key={item.id}
+                            value={item.id}
+                          >
+                            {item.name}
+                          </option>
+                        )
+                      )}
+
+                    </select>
+
+                  </div>
+
+                  {/* JENIS KELAMIN */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Jenis Kelamin
+                    </label>
+
+                    <select
+                      name="gender"
+                      value={form.gender}
+                      onChange={handleChange}
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    >
+
+                      <option value="">
+                        Pilih Jenis Kelamin
+                      </option>
+
+                      <option value="L">
+                        Laki-laki
+                      </option>
+
+                      <option value="P">
+                        Perempuan
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* TEMPAT LAHIR */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Tempat Lahir
+                    </label>
+
+                    <input
+                      type="text"
+                      name="birth_place"
+                      value={form.birth_place}
+                      onChange={handleChange}
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                  </div>
+
+                  {/* TANGGAL LAHIR */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Tanggal Lahir
+                    </label>
+
+                    <input
+                      type="date"
+                      name="birth_date"
+                      value={
+                        form.birth_date || ""
+                      }
+                      onChange={handleChange}
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                  </div>
+
                 </div>
 
-                {/* NAMA LENGKAP */}
-
-                <div className="md:col-span-2">
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Nama Lengkap
-                  </label>
-
-                  <input
-                    type="text"
-                    name="full_name"
-                    value={form.full_name}
-                    onChange={handleChange}
-                    required
-                    className="
-                      w-full
-                      border
-                      border-gray-300
-                      rounded-lg
-                      px-4
-                      py-3
-                      bg-white
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-blue-500
-                    "
-                  />
-                </div>
-
-                {/* KELAS */}
-
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Kelas
-                  </label>
-
-                  <select
-                    name="class_id"
-                    value={form.class_id}
-                    onChange={handleChange}
-                    required
-                    className="
-                      w-full
-                      border
-                      border-gray-300
-                      rounded-lg
-                      px-4
-                      py-3
-                      bg-white
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-blue-500
-                    "
-                  >
-                    <option value="">
-                      Pilih Kelas
-                    </option>
-
-                    {classes.map(
-                      (item) => (
-                        <option
-                          key={item.id}
-                          value={item.id}
-                        >
-                          {item.name}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </div>
-
-                {/* JENIS KELAMIN */}
-
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Jenis Kelamin
-                  </label>
-
-                  <select
-                    name="gender"
-                    value={form.gender}
-                    onChange={handleChange}
-                    className="
-                      w-full
-                      border
-                      border-gray-300
-                      rounded-lg
-                      px-4
-                      py-3
-                      bg-white
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-blue-500
-                    "
-                  >
-                    <option value="">
-                      Pilih Jenis Kelamin
-                    </option>
-
-                    <option value="L">
-                      Laki-laki
-                    </option>
-
-                    <option value="P">
-                      Perempuan
-                    </option>
-                  </select>
-                </div>
-
-                {/* TEMPAT LAHIR */}
-
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Tempat Lahir
-                  </label>
-
-                  <input
-                    type="text"
-                    name="birth_place"
-                    value={form.birth_place}
-                    onChange={handleChange}
-                    className="
-                      w-full
-                      border
-                      border-gray-300
-                      rounded-lg
-                      px-4
-                      py-3
-                      bg-white
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-blue-500
-                    "
-                  />
-                </div>
-
-                {/* TANGGAL LAHIR */}
-
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Tanggal Lahir
-                  </label>
-
-                  <input
-                    type="date"
-                    name="birth_date"
-                    value={
-                      form.birth_date || ""
-                    }
-                    onChange={handleChange}
-                    className="
-                      w-full
-                      border
-                      border-gray-300
-                      rounded-lg
-                      px-4
-                      py-3
-                      bg-white
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-blue-500
-                    "
-                  />
-                </div>
-
-              </div>
+              </section>
 
               {/* =================================================
-                  STATUS AKTIF
+                  STATUS
               ================================================= */}
 
-              <div className="border-t border-gray-200 pt-6">
+              <section className="border-t border-gray-200 pt-8">
 
-                <label className="flex items-center gap-3 cursor-pointer">
+                <div className="mb-5">
 
-                  <input
-                    type="checkbox"
-                    checked={form.is_active}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        is_active:
-                          e.target.checked,
-                      }))
-                    }
-                    className="w-5 h-5"
-                  />
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Status
+                  </h2>
 
-                  <span className="font-medium text-gray-700">
-                    Siswa Aktif
-                  </span>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Atur status siswa dan kartu ujian.
+                  </p>
 
-                </label>
+                </div>
 
-              </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                  {/* STATUS SISWA */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Status Siswa
+                    </label>
+
+                    <select
+                      name="is_active"
+                      value={
+                        form.is_active
+                          ? "true"
+                          : "false"
+                      }
+                      onChange={(e) =>
+                        setForm(
+                          (prev) => ({
+                            ...prev,
+                            is_active:
+                              e.target.value ===
+                              "true",
+                          })
+                        )
+                      }
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    >
+
+                      <option value="true">
+                        Aktif
+                      </option>
+
+                      <option value="false">
+                        Tidak Aktif
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* STATUS KARTU */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Status Kartu
+                    </label>
+
+                    <select
+                      name="status_kartu"
+                      value={
+                        form.status_kartu
+                      }
+                      onChange={handleChange}
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    >
+
+                      <option value="BELUM">
+                        BELUM
+                      </option>
+
+                      <option value="SIAP">
+                        SIAP
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                </div>
+
+              </section>
+
+              {/* =================================================
+                  DATA UJIAN
+              ================================================= */}
+
+              <section className="border-t border-gray-200 pt-8">
+
+                <div className="mb-5">
+
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Data Ujian
+                  </h2>
+
+                  <p className="text-sm text-gray-500 mt-1">
+                    Informasi yang digunakan untuk kartu ujian.
+                  </p>
+
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                  {/* NOMOR UJIAN */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Nomor Ujian
+                    </label>
+
+                    <input
+                      type="text"
+                      name="nomor_ujian"
+                      value={
+                        form.nomor_ujian
+                      }
+                      onChange={handleChange}
+                      placeholder="Contoh: 001"
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                  </div>
+
+                  {/* LEMBAR UJIAN */}
+
+                  <div>
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Lembar Ujian
+                    </label>
+
+                    <input
+                      type="text"
+                      name="lembar_ujian"
+                      value={
+                        form.lembar_ujian
+                      }
+                      onChange={handleChange}
+                      placeholder="Contoh: A"
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                  </div>
+
+                  {/* PASSWORD */}
+
+                  <div className="md:col-span-2">
+
+                    <label className="block font-medium text-gray-700 mb-2">
+                      Password Ujian
+                    </label>
+
+                    <input
+                      type="text"
+                      name="password_ujian"
+                      value={
+                        form.password_ujian
+                      }
+                      onChange={handleChange}
+                      placeholder="Masukkan password ujian"
+                      className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-lg
+                        px-4
+                        py-3
+                        bg-white
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                      "
+                    />
+
+                    <p className="text-xs text-gray-400 mt-2">
+                      Password ini dapat digunakan
+                      pada kartu atau akses ujian siswa.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </section>
 
               {/* =================================================
                   PESAN
@@ -587,8 +873,6 @@ export default function EditStudentPage() {
 
               <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
 
-                {/* BATAL */}
-
                 <button
                   type="button"
                   onClick={() =>
@@ -610,8 +894,6 @@ export default function EditStudentPage() {
                 >
                   Batal
                 </button>
-
-                {/* SIMPAN */}
 
                 <button
                   type="submit"

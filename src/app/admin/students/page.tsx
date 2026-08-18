@@ -4,7 +4,9 @@ import Link from "next/link";
 import DeleteStudentButton from "@/components/DeleteStudentButton";
 
 import { getStudents } from "@/services/student.service";
+
 export const dynamic = "force-dynamic";
+
 export default async function StudentPage() {
   const students = await getStudents();
 
@@ -34,7 +36,7 @@ export default async function StudentPage() {
         <main className="p-8">
 
           {/* =================================================
-              JUDUL + TOMBOL TAMBAH
+              JUDUL + TOMBOL
           ================================================= */}
 
           <div
@@ -47,6 +49,7 @@ export default async function StudentPage() {
           >
 
             <div>
+
               <h1 className="text-3xl font-bold text-gray-800">
                 Data Siswa
               </h1>
@@ -54,48 +57,56 @@ export default async function StudentPage() {
               <p className="text-gray-500 mt-1">
                 Daftar siswa SMK Ekonomika
               </p>
+
             </div>
 
             <div className="flex items-center gap-3">
-  <Link
-    href="/admin/import"
-    className="
-      inline-flex
-      items-center
-      justify-center
-      bg-green-600
-      hover:bg-green-700
-      text-white
-      px-5
-      py-3
-      rounded-lg
-      font-semibold
-      transition
-    "
-  >
-    Import Data
-  </Link>
 
-  <Link
-    href="/admin/students/create"
-    className="
-      inline-flex
-      items-center
-      justify-center
-      bg-blue-600
-      hover:bg-blue-700
-      text-white
-      px-5
-      py-3
-      rounded-lg
-      font-semibold
-      transition
-      shadow-sm
-    "
-  >
-    + Tambah Siswa
-  </Link>
-</div>
+              {/* IMPORT */}
+
+              <Link
+                href="/admin/import"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  bg-green-600
+                  hover:bg-green-700
+                  text-white
+                  px-5
+                  py-3
+                  rounded-lg
+                  font-semibold
+                  transition
+                  shadow-sm
+                "
+              >
+                Import Data
+              </Link>
+
+              {/* TAMBAH */}
+
+              <Link
+                href="/admin/students/create"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  bg-blue-600
+                  hover:bg-blue-700
+                  text-white
+                  px-5
+                  py-3
+                  rounded-lg
+                  font-semibold
+                  transition
+                  shadow-sm
+                "
+              >
+                + Tambah Siswa
+              </Link>
+
+            </div>
 
           </div>
 
@@ -144,9 +155,9 @@ export default async function StudentPage() {
 
             <div className="overflow-x-auto">
 
-              <table className="w-full min-w-[900px]">
+              <table className="w-full min-w-[1100px]">
 
-                {/* HEADER TABLE */}
+                {/* HEADER */}
 
                 <thead>
 
@@ -219,14 +230,26 @@ export default async function StudentPage() {
 
                     <th
                       className="
-                        text-left
+                        text-center
                         py-4
                         px-3
                         font-semibold
                         text-gray-700
                       "
                     >
-                      Status
+                      Status Siswa
+                    </th>
+
+                    <th
+                      className="
+                        text-center
+                        py-4
+                        px-3
+                        font-semibold
+                        text-gray-700
+                      "
+                    >
+                      Status Kartu
                     </th>
 
                     <th
@@ -245,7 +268,7 @@ export default async function StudentPage() {
 
                 </thead>
 
-                {/* BODY TABLE */}
+                {/* BODY */}
 
                 <tbody>
 
@@ -254,7 +277,7 @@ export default async function StudentPage() {
                     <tr>
 
                       <td
-                        colSpan={7}
+                        colSpan={8}
                         className="
                           text-center
                           py-12
@@ -359,12 +382,13 @@ export default async function StudentPage() {
                               {namaKelas}
                             </td>
 
-                            {/* STATUS */}
+                            {/* STATUS SISWA */}
 
                             <td
                               className="
                                 py-4
                                 px-3
+                                text-center
                               "
                             >
 
@@ -408,6 +432,67 @@ export default async function StudentPage() {
 
                             </td>
 
+                            {/* STATUS KARTU */}
+
+                            <td
+                              className="
+                                py-4
+                                px-3
+                                text-center
+                              "
+                            >
+
+                              {student.status_kartu ===
+                              "SIAP" ? (
+
+                                <span
+                                  className="
+                                    inline-flex
+                                    items-center
+                                    gap-1.5
+                                    px-3
+                                    py-1
+                                    rounded-full
+                                    text-sm
+                                    font-semibold
+                                    bg-blue-100
+                                    text-blue-700
+                                  "
+                                >
+                                  <span>
+                                    ✓
+                                  </span>
+
+                                  SIAP
+                                </span>
+
+                              ) : (
+
+                                <span
+                                  className="
+                                    inline-flex
+                                    items-center
+                                    gap-1.5
+                                    px-3
+                                    py-1
+                                    rounded-full
+                                    text-sm
+                                    font-semibold
+                                    bg-yellow-100
+                                    text-yellow-700
+                                  "
+                                >
+                                  <span>
+                                    !
+                                  </span>
+
+                                  BELUM
+                                </span>
+
+                              )}
+
+                            </td>
+
                             {/* AKSI */}
 
                             <td
@@ -433,7 +518,9 @@ export default async function StudentPage() {
 
                               <DeleteStudentButton
                                 id={student.id}
-                                name={student.full_name}
+                                name={
+                                  student.full_name
+                                }
                               />
 
                             </td>

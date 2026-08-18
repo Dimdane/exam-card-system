@@ -13,7 +13,8 @@ export default function ImportPage() {
   const handleFileChange = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    const selectedFile = event.target.files?.[0] ?? null;
+    const selectedFile =
+      event.target.files?.[0] ?? null;
 
     setFile(selectedFile);
     setMessage("");
@@ -22,7 +23,9 @@ export default function ImportPage() {
 
   const handleImport = async () => {
     if (!file) {
-      setMessage("Silakan pilih file Excel terlebih dahulu.");
+      setMessage(
+        "Silakan pilih file Excel terlebih dahulu."
+      );
       setSuccess(false);
       return;
     }
@@ -36,17 +39,22 @@ export default function ImportPage() {
 
       formData.append("file", file);
 
-      const response = await fetch("/api/admin/import", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "/api/admin/import",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const result = await response.json();
 
       if (!response.ok || !result.success) {
         setSuccess(false);
+
         setMessage(
-          result.message || "Import data gagal."
+          result.message ||
+            "Import data gagal."
         );
 
         return;
@@ -58,9 +66,10 @@ export default function ImportPage() {
       // Reset file setelah berhasil
       setFile(null);
 
-      const fileInput = document.getElementById(
-        "excel-file"
-      ) as HTMLInputElement | null;
+      const fileInput =
+        document.getElementById(
+          "excel-file"
+        ) as HTMLInputElement | null;
 
       if (fileInput) {
         fileInput.value = "";
@@ -69,6 +78,7 @@ export default function ImportPage() {
       console.error(error);
 
       setSuccess(false);
+
       setMessage(
         "Tidak dapat terhubung ke server. Silakan coba lagi."
       );
@@ -79,46 +89,58 @@ export default function ImportPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
+
       {/* SIDEBAR */}
       <Sidebar />
 
       {/* AREA KANAN */}
       <div className="ml-[330px] min-h-screen">
+
         {/* HEADER */}
         <Header />
 
         {/* CONTENT */}
         <main className="p-8">
-          {/* JUDUL HALAMAN */}
+
+          {/* =====================================================
+              JUDUL
+          ====================================================== */}
+
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">
               Import Data Siswa
             </h1>
 
             <p className="text-gray-500 mt-2">
-              Tambahkan data siswa secara massal melalui file
-              Excel.
+              Tambahkan data siswa secara massal
+              melalui file Excel.
             </p>
           </div>
 
           {/* =====================================================
               CARD IMPORT
           ====================================================== */}
+
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200">
+
             <div className="p-8">
+
               {/* HEADER CARD */}
+
               <div className="mb-6">
                 <h2 className="text-xl font-bold text-gray-900">
                   Upload File Excel
                 </h2>
 
                 <p className="text-gray-500 text-sm mt-1">
-                  Pilih file Excel yang berisi data siswa untuk
-                  dimasukkan ke dalam sistem.
+                  Pilih file Excel yang berisi
+                  data siswa untuk dimasukkan
+                  ke dalam sistem.
                 </p>
               </div>
 
               {/* AREA UPLOAD */}
+
               <div
                 className="
                   border-2
@@ -134,7 +156,9 @@ export default function ImportPage() {
                   transition
                 "
               >
+
                 {/* ICON */}
+
                 <div
                   className="
                     mx-auto
@@ -154,6 +178,7 @@ export default function ImportPage() {
                 </div>
 
                 {/* JUDUL */}
+
                 <h3 className="text-lg font-bold text-gray-900">
                   Pilih File Excel
                 </h3>
@@ -172,7 +197,9 @@ export default function ImportPage() {
                 </p>
 
                 {/* INPUT FILE */}
+
                 <div className="mt-6">
+
                   <label
                     htmlFor="excel-file"
                     className="
@@ -204,9 +231,11 @@ export default function ImportPage() {
                     onChange={handleFileChange}
                     className="hidden"
                   />
+
                 </div>
 
                 {/* FILE TERPILIH */}
+
                 {file && (
                   <div
                     className="
@@ -222,7 +251,9 @@ export default function ImportPage() {
                       text-left
                     "
                   >
+
                     <div className="flex items-center gap-3">
+
                       <div
                         className="
                           w-10
@@ -239,6 +270,7 @@ export default function ImportPage() {
                       </div>
 
                       <div className="min-w-0">
+
                         <p className="text-xs text-gray-500">
                           File yang dipilih
                         </p>
@@ -250,13 +282,18 @@ export default function ImportPage() {
                         <p className="text-xs text-gray-400 mt-1">
                           {(file.size / 1024).toFixed(1)} KB
                         </p>
+
                       </div>
+
                     </div>
+
                   </div>
                 )}
+
               </div>
 
               {/* PESAN */}
+
               {message && (
                 <div
                   className={`
@@ -271,12 +308,15 @@ export default function ImportPage() {
                     }
                   `}
                 >
+
                   <div className="flex items-start gap-3">
+
                     <div className="text-xl">
                       {success ? "✓" : "✕"}
                     </div>
 
                     <div>
+
                       <p className="font-semibold">
                         {success
                           ? "Import Berhasil"
@@ -286,15 +326,21 @@ export default function ImportPage() {
                       <p className="text-sm mt-1">
                         {message}
                       </p>
+
                     </div>
+
                   </div>
+
                 </div>
               )}
 
               {/* FOOTER CARD */}
+
               <div className="flex items-center justify-between mt-8">
+
                 <p className="text-sm text-gray-400">
-                  Pastikan format data Excel sudah sesuai.
+                  Pastikan format data Excel
+                  sudah sesuai.
                 </p>
 
                 <button
@@ -319,32 +365,46 @@ export default function ImportPage() {
                     ? "Sedang Mengimport..."
                     : "Import Data"}
                 </button>
+
               </div>
+
             </div>
+
           </div>
 
           {/* =====================================================
               FORMAT EXCEL
           ====================================================== */}
+
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 mt-6">
+
             <div className="p-8">
+
               {/* HEADER */}
+
               <div className="mb-6">
+
                 <h2 className="text-xl font-bold text-gray-900">
                   Format Data Excel
                 </h2>
 
                 <p className="text-gray-500 text-sm mt-1">
-                  Gunakan nama kolom berikut pada baris pertama
-                  file Excel.
+                  Gunakan nama kolom berikut pada
+                  baris pertama file Excel.
                 </p>
+
               </div>
 
               {/* TABLE */}
+
               <div className="overflow-x-auto border border-gray-200 rounded-xl">
+
                 <table className="w-full text-sm">
+
                   <thead>
+
                     <tr className="bg-gray-50 border-b border-gray-200">
+
                       <th className="px-5 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
                         NIS
                       </th>
@@ -372,11 +432,35 @@ export default function ImportPage() {
                       <th className="px-5 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
                         Tanggal Lahir
                       </th>
+
+                      <th className="px-5 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
+                        Status Aktif
+                      </th>
+
+                      <th className="px-5 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
+                        Status Kartu
+                      </th>
+
+                      <th className="px-5 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
+                        Nomor Ujian
+                      </th>
+
+                      <th className="px-5 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
+                        Lembar Ujian
+                      </th>
+
+                      <th className="px-5 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
+                        Password Ujian
+                      </th>
+
                     </tr>
+
                   </thead>
 
                   <tbody>
+
                     <tr className="hover:bg-gray-50 transition">
+
                       <td className="px-5 py-4 border-b border-gray-100 text-gray-700">
                         1001
                       </td>
@@ -404,12 +488,37 @@ export default function ImportPage() {
                       <td className="px-5 py-4 border-b border-gray-100 text-gray-700">
                         2009-05-12
                       </td>
+
+                      <td className="px-5 py-4 border-b border-gray-100 text-gray-700">
+                        YA
+                      </td>
+
+                      <td className="px-5 py-4 border-b border-gray-100 text-gray-700">
+                        BELUM
+                      </td>
+
+                      <td className="px-5 py-4 border-b border-gray-100 text-gray-700">
+                        001
+                      </td>
+
+                      <td className="px-5 py-4 border-b border-gray-100 text-gray-700">
+                        A
+                      </td>
+
+                      <td className="px-5 py-4 border-b border-gray-100 text-gray-700">
+                        AHM123
+                      </td>
+
                     </tr>
+
                   </tbody>
+
                 </table>
+
               </div>
 
               {/* CATATAN */}
+
               <div
                 className="
                   mt-5
@@ -420,30 +529,67 @@ export default function ImportPage() {
                   p-5
                 "
               >
+
                 <div className="flex gap-3">
+
                   <div className="text-lg">
                     ℹ️
                   </div>
 
                   <div>
+
                     <p className="font-semibold text-blue-800">
                       Catatan Import
                     </p>
 
                     <p className="text-blue-700 text-sm mt-1 leading-relaxed">
-                      Kolom Kelas harus sesuai dengan data kelas
-                      yang sudah ada di database, misalnya{" "}
+                      <strong>
+                        Kolom yang wajib diisi:
+                      </strong>{" "}
+                      NIS, NISN, Nama Lengkap,
+                      dan Kelas.
+                    </p>
+
+                    <p className="text-blue-700 text-sm mt-2 leading-relaxed">
+                      Kolom Kelas harus sesuai
+                      dengan data kelas yang sudah
+                      ada di database, misalnya{" "}
                       <strong>X PPLG 1</strong>,{" "}
-                      <strong>XI AKL 2</strong>, atau{" "}
+                      <strong>XI AKL 2</strong>,
+                      atau{" "}
                       <strong>XII DKV 1</strong>.
                     </p>
+
+                    <p className="text-blue-700 text-sm mt-2 leading-relaxed">
+                      Jika Status Aktif dikosongkan,
+                      siswa akan dianggap{" "}
+                      <strong>Aktif</strong>.
+                      Jika Status Kartu dikosongkan,
+                      status otomatis menjadi{" "}
+                      <strong>BELUM</strong>.
+                    </p>
+
+                    <p className="text-blue-700 text-sm mt-2 leading-relaxed">
+                      Nomor Ujian, Lembar Ujian,
+                      dan Password Ujian boleh
+                      dikosongkan dan dapat diisi
+                      kemudian melalui sistem.
+                    </p>
+
                   </div>
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
+
         </main>
+
       </div>
+
     </div>
   );
 }

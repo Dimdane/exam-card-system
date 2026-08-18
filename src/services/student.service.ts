@@ -12,6 +12,10 @@ export async function getStudents() {
       birth_place,
       birth_date,
       is_active,
+      status_kartu,
+      nomor_ujian,
+      lembar_ujian,
+      password_ujian,
       class_id,
       classes (
         id,
@@ -28,7 +32,11 @@ export async function getStudents() {
     });
 
   if (error) {
-    console.error("Gagal mengambil data siswa:", error);
+    console.error(
+      "Gagal mengambil data siswa:",
+      error
+    );
+
     return [];
   }
 
